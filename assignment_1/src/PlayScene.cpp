@@ -112,6 +112,19 @@ void PlayScene::handleEvents()
 
 void PlayScene::start()
 {
+	//Instructions
+
+	const SDL_Color blue = { 0, 0, 255, 255 };
+	m_pInstructions = new Label("1, for target,2 for seek ,3 for flee , ",
+		"Consolas", 20, blue, glm::vec2(400.0f, 40.0f));
+	m_pInstructions->setParent(this);
+	addChild(m_pInstructions);
+	m_pInstructions = new Label(" 4 for arrive, 5 for Avoidance ,0 for close all ",
+		"Consolas", 20, blue, glm::vec2(400.0f, 60.0f));
+	m_pInstructions->setParent(this);
+	addChild(m_pInstructions);
+	
+	//
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
 	
