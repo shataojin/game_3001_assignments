@@ -39,6 +39,8 @@ private:
 	
 	Label* m_pInstructionsLabel;
 	Label* m_pInstructions;
+
+	
 };
 
 #endif /* defined (__PLAY_SCENE__) */
