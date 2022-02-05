@@ -165,6 +165,7 @@
     <ClCompile Include="..\src\Agent.cpp" />
     <ClCompile Include="..\src\Button.cpp" />
     <ClCompile Include="..\src\CollisionManager.cpp" />
+    <ClCompile Include="..\src\flee.cpp" />
     <ClCompile Include="..\src\ImGuiWindowFrame.cpp" />
     <ClCompile Include="..\src\Obstacle.cpp" />
     <ClCompile Include="..\src\Seeking.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="..\src\CollisionManager.h" />
     <ClInclude Include="..\src\CollisionShape.h" />
     <ClInclude Include="..\src\Config.h" />
+    <ClInclude Include="..\src\flee.h" />
     <ClInclude Include="..\src\ImGuiWindowFrame.h" />
     <ClInclude Include="..\src\Obstacle.h" />
     <ClInclude Include="..\src\Seeking.h" />

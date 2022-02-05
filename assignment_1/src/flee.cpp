@@ -1,11 +1,11 @@
-#include "Seeking.h"
+#include "flee.h"
 #include "TextureManager.h"
 #include "Util.h"
 #include <iostream>
 
 #include "Game.h"
 
-Seeking::Seeking()
+flee::flee()
 {
 	TextureManager::Instance().load("../Assets/textures/ncl.png", "ships");
 
@@ -18,27 +18,29 @@ Seeking::Seeking()
 	getRigidBody()->isColliding = false;
 	setType(AGENT);
 
-	
+
 	setCurrentHeading(0.0f);
 
-	
+	m_targetradius = 5.0f;
+	m_slowradius = 5.0f;
+	int timetotarget = 0.1;
 	m_maxSpeed = 10.0f; // 10 pixels per frame
 	m_turnRate = 5.0f; // 5 degrees per frame
 	m_accelerationRate = 2.0f; // 2 pixels per frame
-	setLOSDistance(100.0f);
+	setLOSDistance(150.0f);
 	setLOSColour(glm::vec4(0, 1, 0, 1));
 }
 
-Seeking::~Seeking()
+flee::~flee()
 = default;
 
-void Seeking::draw()
+void flee::draw()
 {
 	// alias for x and y
 	const auto x = getTransform()->position.x;
 	const auto y = getTransform()->position.y;
 
-	// draw the Seeking
+	// draw the starship
 	TextureManager::Instance().draw("ships", x, y, getCurrentHeading(), 255, true);
 	// draw LOS
 	Util::DrawLine(getTransform()->position, getTransform()->position + getCurrentDirection() * getLOSDistance(), getLOSColour());
@@ -46,51 +48,55 @@ void Seeking::draw()
 
 
 
-void Seeking::update()
+void flee::update()
 {
 	m_move();
 }
 
-void Seeking::clean()
+void flee::clean()
 {
 }
 
-float Seeking::getMaxSpeed() const
+float flee::getMaxSpeed() const
 {
 	return m_maxSpeed;
 }
 
-float Seeking::getTurnRate() const
+float flee::getTurnRate() const
 {
 	return m_turnRate;
 }
 
 
-glm::vec2 Seeking::getDesiredVelocity() const
+glm::vec2 flee::getDesiredVelocity() const
 {
 	return m_desiredVelocity;
 }
 
-float Seeking::getAccelerationRate() const
+float flee::getAccelerationRate() const
 {
 	return m_accelerationRate;
 }
 
-void Seeking::setAccelerationRate(const float rate)
+void flee::setAccelerationRate(const float rate)
 {
 	m_accelerationRate = rate;
 }
 
 
 
-void Seeking::setDesiredVelocity(const glm::vec2 target_position)
+
+void flee::setDesiredVelocity(const glm::vec2 target_position)
 {
 	m_desiredVelocity = Util::normalize(target_position - getTransform()->position) * m_maxSpeed;
 	getRigidBody()->velocity = m_desiredVelocity - getRigidBody()->velocity;
+
+
+
 	//std::cout << "Desired Velocity: (" << m_desiredVelocity.x << ", " << m_desiredVelocity.y << ")" << std::endl;
 }
 
-void Seeking::LookWhereIamGoing(glm::vec2 target_direction)
+void flee::LookWhereIamGoing(glm::vec2 target_direction)
 {
 	const auto target_rotation = Util::signedAngle(getCurrentDirection(), target_direction);
 
@@ -100,19 +106,24 @@ void Seeking::LookWhereIamGoing(glm::vec2 target_direction)
 	{
 		if (target_rotation > 0.0f)
 		{
-			setCurrentHeading(getCurrentHeading() + getTurnRate());
+			setCurrentHeading(getCurrentHeading() - getTurnRate());
 		}
 		else if (target_rotation < 0.0f)
 		{
-			setCurrentHeading(getCurrentHeading() - getTurnRate());
+			setCurrentHeading(getCurrentHeading() + getTurnRate());
 		}
 	}
 }
 
-void Seeking::seek()
+
+
+
+void flee::m_move()
 {
 	// compute the target direction and magnitude
-	auto target_direction = getTargetPosition() - getTransform()->position;
+	auto target_direction = getTargetPosition() + getTransform()->position;
+
+
 
 	// normalize the target direction
 	target_direction = Util::normalize(target_direction);
@@ -123,13 +134,9 @@ void Seeking::seek()
 	LookWhereIamGoing(target_direction);
 
 	// seek without LookWhereIamGoing
-	//setCurrentDirection(target_direction); 
-}
-
-void Seeking::m_move()
-{
-	seek();
+	//setCurrentDirection(target_direction);
 	auto deltaTime = TheGame::Instance().getDeltaTime();
+
 
 	getRigidBody()->acceleration = getCurrentDirection() * getAccelerationRate();
 
@@ -142,15 +149,15 @@ void Seeking::m_move()
 	getRigidBody()->velocity = Util::clamp(getRigidBody()->velocity, getMaxSpeed());
 
 	// add velocity to position
-	getTransform()->position += getRigidBody()->velocity;
+		getTransform()->position += getRigidBody()->velocity;
 }
 
-void Seeking::setMaxSpeed(const float speed)
+void flee::setMaxSpeed(const float speed)
 {
 	m_maxSpeed = speed;
 }
 
-void Seeking::setTurnRate(const float angle)
+void flee::setTurnRate(const float angle)
 {
 	m_turnRate = angle;
 }

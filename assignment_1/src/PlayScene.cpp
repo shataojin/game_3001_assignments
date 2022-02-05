@@ -58,6 +58,12 @@ void PlayScene::handleEvents()
 		m_pSeeking->setEnabled(true);
 	}
 
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_3))
+	{
+		SoundManager::Instance().playSound("open", 0, -1);
+		m_flee->setEnabled(true);
+	}
+
 }
 
 void PlayScene::start()
@@ -90,6 +96,13 @@ void PlayScene::start()
 	m_pSeeking->setTargetPosition(m_pTarget->getTransform()->position);
 	addChild(m_pSeeking);
 	m_pSeeking->setEnabled(false);
+
+	// Add flee to Scene
+	m_flee = new flee();
+	m_flee->getTransform()->position = glm::vec2(500.0f, 300.0f);
+	m_flee->setTargetPosition(m_pTarget->getTransform()->position);
+	addChild(m_flee);
+	m_flee->setEnabled(false);
 	
 	/* Instructions Label */
 	m_pInstructionsLabel = new Label("Press the backtick (`) character to toggle Debug View", "Consolas");

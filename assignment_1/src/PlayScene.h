@@ -6,6 +6,7 @@
 #include "Plane.h"
 #include "Player.h"
 #include "Button.h"
+#include "flee.h"
 #include "Label.h"
 #include "Seeking.h"
 #include "Target.h"
@@ -32,7 +33,7 @@ private:
 	//game obj
 	Target* m_pTarget;
 	Seeking* m_pSeeking;
-
+	flee* m_flee;
 
 	// UI Items
 	
