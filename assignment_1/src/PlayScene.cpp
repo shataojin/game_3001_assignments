@@ -52,6 +52,12 @@ void PlayScene::handleEvents()
 		m_pTarget->setEnabled(true);
 	}
 
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_2))
+	{
+		SoundManager::Instance().playSound("open", 0, -1);
+		m_pSeeking->setEnabled(true);
+	}
+
 }
 
 void PlayScene::start()
@@ -78,6 +84,13 @@ void PlayScene::start()
 	addChild(m_pTarget);
 	m_pTarget->setEnabled(false);
 
+	// Add StarShip to Scene
+	m_pSeeking = new Seeking();
+	m_pSeeking->getTransform()->position = glm::vec2(200.0f, 300.0f);
+	m_pSeeking->setTargetPosition(m_pTarget->getTransform()->position);
+	addChild(m_pSeeking);
+	m_pSeeking->setEnabled(false);
+	
 	/* Instructions Label */
 	m_pInstructionsLabel = new Label("Press the backtick (`) character to toggle Debug View", "Consolas");
 	m_pInstructionsLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH * 0.5f, 500.0f);
@@ -95,7 +108,7 @@ void PlayScene::GUI_Function() const
 	// See examples by uncommenting the following - also look at imgui_demo.cpp in the IMGUI filter
 	//ImGui::ShowDemoWindow();
 	
-	ImGui::Begin("Your Window Title Goes Here", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoMove);
+	ImGui::Begin("GAME3001-M2021-assignment-1", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoMove);
 
 	if(ImGui::Button("My Button"))
 	{

@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Button.h"
 #include "Label.h"
+#include "Seeking.h"
 #include "Target.h"
 
 class PlayScene : public Scene
@@ -30,6 +31,7 @@ private:
 
 	//game obj
 	Target* m_pTarget;
+	Seeking* m_pSeeking;
 
 
 	// UI Items
