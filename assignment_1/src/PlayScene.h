@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Button.h"
 #include "Label.h"
+#include "Target.h"
 
 class PlayScene : public Scene
 {
@@ -27,13 +28,12 @@ private:
 	
 	glm::vec2 m_mousePosition;
 
-	Plane* m_pPlaneSprite;
-	Player* m_pPlayer;
-	bool m_playerFacingRight;
+	//game obj
+	Target* m_pTarget;
+
 
 	// UI Items
-	Button* m_pBackButton;
-	Button* m_pNextButton;
+	
 	Label* m_pInstructionsLabel;
 	Label* m_pInstructions;
 };

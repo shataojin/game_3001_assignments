@@ -49,7 +49,7 @@ void PlayScene::handleEvents()
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_1))
 	{
 		SoundManager::Instance().playSound("open", 0, -1);
-		//m_pTarget->setEnabled(true);
+		m_pTarget->setEnabled(true);
 	}
 
 }
@@ -72,7 +72,11 @@ void PlayScene::start()
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
 	
-	
+	// Add Target to Scene
+	m_pTarget = new Target();
+	m_pTarget->getTransform()->position = glm::vec2(600.0f, 300.0f);
+	addChild(m_pTarget);
+	m_pTarget->setEnabled(false);
 
 	/* Instructions Label */
 	m_pInstructionsLabel = new Label("Press the backtick (`) character to toggle Debug View", "Consolas");
