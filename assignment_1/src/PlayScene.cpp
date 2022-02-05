@@ -11,6 +11,12 @@
 PlayScene::PlayScene()
 {
 	PlayScene::start();
+	SoundManager::Instance().load("../Assets/audio/Bgm.mp3", "Bgm", SOUND_MUSIC);
+	SoundManager::Instance().load("../Assets/audio/open.wav", "open", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/close.wav", "close", SOUND_SFX);
+	SoundManager::Instance().playMusic("Bgm", -1, 0);
+	SoundManager::Instance().setMusicVolume(15);
+	SoundManager::Instance().setSoundVolume(20);
 }
 
 PlayScene::~PlayScene()
@@ -98,8 +104,12 @@ void PlayScene::handleEvents()
 	{
 		TheGame::Instance().quit();
 	}
-
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_1))
+	{
+		SoundManager::Instance().playSound("open", 0, -1);
+		//m_pTarget->setEnabled(true);
+	}
+	/*if (EventManager::Instance().isKeyDown(SDL_SCANCODE_1))
 	{
 		TheGame::Instance().changeSceneState(START_SCENE);
 	}
@@ -108,6 +118,7 @@ void PlayScene::handleEvents()
 	{
 		TheGame::Instance().changeSceneState(END_SCENE);
 	}
+	*/
 }
 
 void PlayScene::start()
