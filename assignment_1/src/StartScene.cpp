@@ -37,10 +37,10 @@ void StartScene::handleEvents()
 		TheGame::Instance().quit();
 	}
 
-	if(EventManager::Instance().isKeyDown(SDL_SCANCODE_1))
+	/*if(EventManager::Instance().isKeyDown(SDL_SCANCODE_1))
 	{
 		TheGame::Instance().changeSceneState(PLAY_SCENE);
-	}
+	}*/
 }
 
 void StartScene::start()
@@ -52,7 +52,7 @@ void StartScene::start()
 
 	m_pInstructionsLabel = new Label("Press 1 to Play", "Consolas", 40, blue, glm::vec2(400.0f, 120.0f));
 	m_pInstructionsLabel->setParent(this);
-	addChild(m_pInstructionsLabel);
+	//addChild(m_pInstructionsLabel);
 
 	//
 	m_TextLabels = new Label("name:taojin sha", "Consolas", 20, blue, glm::vec2(90.0f, 560.0f));
