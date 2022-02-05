@@ -54,6 +54,16 @@ void StartScene::start()
 	m_pInstructionsLabel->setParent(this);
 	addChild(m_pInstructionsLabel);
 
+	//
+	m_TextLabels = new Label("name:taojin sha", "Consolas", 20, blue, glm::vec2(90.0f, 560.0f));
+	m_TextLabels->setParent(this);
+	addChild(m_TextLabels);
+
+	m_TextID = new Label("studentID: 101334639", "Consolas", 20, blue, glm::vec2(115.0f, 580.0f));
+	m_TextID->setParent(this);
+	addChild(m_TextID);
+	//
+	
 
 	m_pShip = new Ship();
 	m_pShip->getTransform()->position = glm::vec2(400.0f, 300.0f); 
