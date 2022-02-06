@@ -31,6 +31,19 @@ void PlayScene::draw()
 void PlayScene::update()
 {
 	updateDisplayList();
+	if(m_Arrival->isEnabled())
+	{
+		if (CollisionManager::circleAABBCheck(m_Arrival, m_TargetOutlCircle))
+		{
+			m_Arrival->setAccelerationRate(-4.0f);
+		}
+		if (CollisionManager::circleAABBCheck(m_Arrival, m_pTarget))
+		{
+			m_Arrival->setAccelerationRate(0.0f);
+			m_Arrival->setMaxSpeed(0);
+			//m_Arrival->getTransform()->position = m_pTarget->getTransform()->position;
+		}
+	}
 }
 
 void PlayScene::clean()
@@ -50,19 +63,25 @@ void PlayScene::handleEvents()
 	{
 		SoundManager::Instance().playSound("open", 0, -1);
 		m_pTarget->setEnabled(true);
+		m_pSeeking->setEnabled(true);
 	}
+
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_2))
 	{
 		SoundManager::Instance().playSound("open", 0, -1);
-		m_pSeeking->setEnabled(true);
+		m_pTarget->setEnabled(true);
+		m_flee->setEnabled(true);
 	}
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_3))
 	{
 		SoundManager::Instance().playSound("open", 0, -1);
-		m_flee->setEnabled(true);
+		m_pTarget->setEnabled(true);
+		m_Arrival->setEnabled(true);
+		m_TargetOutlCircle->setEnabled(true);
 	}
+
 
 }
 
@@ -90,7 +109,7 @@ void PlayScene::start()
 	addChild(m_pTarget);
 	m_pTarget->setEnabled(false);
 
-	// Add StarShip to Scene
+	// Add Seeking to Scene
 	m_pSeeking = new Seeking();
 	m_pSeeking->getTransform()->position = glm::vec2(200.0f, 300.0f);
 	m_pSeeking->setTargetPosition(m_pTarget->getTransform()->position);
@@ -103,6 +122,19 @@ void PlayScene::start()
 	m_flee->setTargetPosition(m_pTarget->getTransform()->position);
 	addChild(m_flee);
 	m_flee->setEnabled(false);
+
+	// Add flee to Scene
+	m_Arrival = new Arrival();
+	m_Arrival->getTransform()->position = glm::vec2(100.0f, 300.0f);
+	m_Arrival->setTargetPosition(m_pTarget->getTransform()->position);
+	addChild(m_Arrival);
+	m_Arrival->setEnabled(false);
+
+	// Add Target to Scene
+	m_TargetOutlCircle = new TargetOutlCircle();
+	m_TargetOutlCircle->getTransform()->position = glm::vec2(600.0f, 300.0f);
+	addChild(m_TargetOutlCircle);
+	m_TargetOutlCircle->setEnabled(false);
 	
 	/* Instructions Label */
 	m_pInstructionsLabel = new Label("Press the backtick (`) character to toggle Debug View", "Consolas");

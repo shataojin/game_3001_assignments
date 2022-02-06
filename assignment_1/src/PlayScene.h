@@ -2,6 +2,7 @@
 #ifndef __PLAY_SCENE__
 #define __PLAY_SCENE__
 
+#include "Arrival.h"
 #include "Scene.h"
 #include "Plane.h"
 #include "Player.h"
@@ -10,6 +11,8 @@
 #include "Label.h"
 #include "Seeking.h"
 #include "Target.h"
+#include "TargetOutlCircle.h"
+
 
 class PlayScene : public Scene
 {
@@ -34,7 +37,9 @@ private:
 	Target* m_pTarget;
 	Seeking* m_pSeeking;
 	flee* m_flee;
-
+	TargetOutlCircle* m_TargetOutlCircle;
+	Arrival* m_Arrival;
+	
 	// UI Items
 	
 	Label* m_pInstructionsLabel;
