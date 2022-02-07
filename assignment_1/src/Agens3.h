@@ -1,15 +1,15 @@
 #pragma once
-#ifndef __AGENT__
-#define __AGENT__
+#ifndef __AGENS3__
+#define __AGENS3__
 
 #include <glm/vec4.hpp>
 #include "DisplayObject.h"
 
-class Agent : public DisplayObject
+class Agens3 : public DisplayObject
 {
 public:
-	Agent();
-	~Agent();
+	Agens3();
+	~Agens3();
 
 	// Inherited via GameObject
 	void draw() override = 0;
@@ -67,9 +67,9 @@ private:
 	bool m_collisionWhiskers[3]; // change to 5 - keeps track of each Whisker colliding
 
 	float m_whiskerAngle; // angle of the left and right whiskers relative to the heading
-
+	
 };
 
 
 
-#endif /* defined ( __AGENT__) */
+#endif /* defined ( __Agens3__) */

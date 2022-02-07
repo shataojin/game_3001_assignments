@@ -41,7 +41,7 @@ void Arrival::draw()
 	// draw the Arrival
 	TextureManager::Instance().draw("ships", x, y, getCurrentHeading(), 255, true);
 	// draw LOS
-	Util::DrawLine(getTransform()->position, getTransform()->position + getCurrentDirection() * getLOSDistance(), getLOSColour());
+	//Util::DrawLine(getTransform()->position, getTransform()->position + getCurrentDirection() * getLOSDistance(), getLOSColour());
 }
 
 
@@ -143,7 +143,7 @@ void Arrival::m_move()
 
 	// add velocity to position
 	getTransform()->position += getRigidBody()->velocity;
-	\
+
 }
 
 void Arrival::setMaxSpeed(const float speed)

@@ -279,7 +279,8 @@ glm::vec2 Util::normalize(const glm::vec2 vec)
 	auto x = vec.x;
 	auto y = vec.y;
 	auto length = (x * x) + (y * y);
-	if (length > 0) {
+	if (length > 0)
+	{
 		length = 1.0 / sqrt(length);
 		dest.x = vec.x * length;
 		dest.y = vec.y * length;
@@ -310,7 +311,26 @@ float Util::signedAngle(const glm::vec2 from, const glm::vec2 to)
 	return unsigned_angle * sign;
 }
 
-void Util::DrawLine(const glm::vec2 start, const glm::vec2 end, const glm::vec4 colour, SDL_Renderer* renderer)
+glm::vec2 Util::rotatePoint(glm::vec2 point, const float angle, const glm::vec2 pivot)
+{
+	const float s = sin(angle * Deg2Rad);
+	const float c = cos(angle * Deg2Rad);
+
+	// translate point back to origin:
+	point.x -= pivot.x;
+	point.y -= pivot.y;
+
+	// rotate point
+	const float new_x = point.x * c - point.y * s;
+	const float new_y = point.x * s + point.y * c;
+
+	// translate point back:
+	point.x = new_x + pivot.x;
+	point.y = new_y + pivot.y;
+	return point;
+}
+
+void Util::DrawLine(const glm::vec2 start, const glm::vec2 end, const glm::vec4 colour, SDL_Renderer * renderer)
 {
 	int r = floor(colour.r * 255.0f);
 	int g = floor(colour.g * 255.0f);
@@ -322,7 +342,7 @@ void Util::DrawLine(const glm::vec2 start, const glm::vec2 end, const glm::vec4 
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 }
 
-void Util::DrawRect(const glm::vec2 position, const int width, const int height, const glm::vec4 colour, SDL_Renderer* renderer)
+void Util::DrawRect(const glm::vec2 position, const int width, const int height, const glm::vec4 colour, SDL_Renderer * renderer)
 {
 	int r = floor(colour.r * 255.0f);
 	int g = floor(colour.g * 255.0f);
@@ -340,7 +360,7 @@ void Util::DrawRect(const glm::vec2 position, const int width, const int height,
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 }
 
-void Util::DrawFilledRect(const glm::vec2 position, const int width, const int height, const glm::vec4 fill_colour, SDL_Renderer* renderer)
+void Util::DrawFilledRect(const glm::vec2 position, const int width, const int height, const glm::vec4 fill_colour, SDL_Renderer * renderer)
 {
 	int r = floor(fill_colour.r * 255.0f);
 	int g = floor(fill_colour.g * 255.0f);
@@ -358,14 +378,14 @@ void Util::DrawFilledRect(const glm::vec2 position, const int width, const int h
 
 	/* Creating the surface. */
 	surface = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
-		
+
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 	SDL_FillRect(surface, nullptr, SDL_MapRGB(surface->format, r, g, b));
 	SDL_RenderDrawRect(renderer, &rectangle);
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 }
 
-void Util::DrawCircle(const glm::vec2 centre, const int radius, const glm::vec4 colour, const ShapeType type, SDL_Renderer* renderer)
+void Util::DrawCircle(const glm::vec2 centre, const int radius, const glm::vec4 colour, const ShapeType type, SDL_Renderer * renderer)
 {
 	int r = floor(colour.r * 255.0f);
 	int g = floor(colour.g * 255.0f);
@@ -445,7 +465,7 @@ void Util::DrawCircle(const glm::vec2 centre, const int radius, const glm::vec4 
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 }
 
-void Util::DrawCapsule(const glm::vec2 position, const int width, const int height, const glm::vec4 colour, SDL_Renderer* renderer)
+void Util::DrawCapsule(const glm::vec2 position, const int width, const int height, const glm::vec4 colour, SDL_Renderer * renderer)
 {
 	int diameter;
 	int radius;

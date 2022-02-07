@@ -3,12 +3,14 @@
 #define __PLAY_SCENE__
 
 #include "Arrival.h"
+#include "Avoidance .h"
 #include "Scene.h"
 #include "Plane.h"
 #include "Player.h"
 #include "Button.h"
 #include "flee.h"
 #include "Label.h"
+#include "Obstacle.h"
 #include "Seeking.h"
 #include "Target.h"
 #include "TargetOutlCircle.h"
@@ -39,7 +41,8 @@ private:
 	flee* m_flee;
 	TargetOutlCircle* m_TargetOutlCircle;
 	Arrival* m_Arrival;
-	
+	Obstacle* m_pObstacle;
+	Avoidance* m_Avoidance;
 	// UI Items
 	
 	Label* m_pInstructionsLabel;

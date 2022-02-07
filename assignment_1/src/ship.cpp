@@ -40,7 +40,7 @@ void Ship::draw()
 	TextureManager::Instance().draw("ship", x, y, getCurrentHeading(), 255, true);
 
 	// draw LOS
-	Util::DrawLine(getTransform()->position, getTransform()->position + getCurrentDirection() * getLOSDistance(), getLOSColour());
+	//Util::DrawLine(getTransform()->position, getTransform()->position + getCurrentDirection() * getLOSDistance(), getLOSColour());
 }
 
 

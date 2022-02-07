@@ -43,7 +43,7 @@ void flee::draw()
 	// draw the starship
 	TextureManager::Instance().draw("ships", x, y, getCurrentHeading(), 255, true);
 	// draw LOS
-	Util::DrawLine(getTransform()->position, getTransform()->position + getCurrentDirection() * getLOSDistance(), getLOSColour());
+	//Util::DrawLine(getTransform()->position, getTransform()->position + getCurrentDirection() * getLOSDistance(), getLOSColour());
 }
 
 
