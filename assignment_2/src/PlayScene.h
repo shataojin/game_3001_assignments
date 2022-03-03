@@ -31,6 +31,9 @@ private:
 	// Game Objects
 	Target* m_pTarget;
 	SpaceShip* m_pSpaceShip;
+	Label* m_pInstructionsLabel{};
+	Label* m_pInstructionsLabe2{};
+	Label* m_pInstructionsLabe3{};
 
 	// Pathfinding Objects and Functions
 	std::vector<Tile*> m_pGrid;

@@ -72,8 +72,25 @@ void PlayScene::handleEvents()
 	m_getTile(15, 10)->setTileStatus(IMPASSABLE);
 	m_getTile(15, 7)->setTileStatus(IMPASSABLE);
 
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_F))
+	{
+		m_setGridEnabled(m_isGridEnabled = true);
+		m_findShortestPath();
+		SoundManager::Instance().playSound("yay", 0);
+	}
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_R))
+	{
+		m_setGridEnabled(m_isGridEnabled = false);
+		m_resetPathFinding();
+		SoundManager::Instance().playSound("yay", 0);
+	}
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_S))
+	{
+		m_shipIsMoving = true;
+		SoundManager::Instance().playSound("thunder", 0);
+	}
 
-
+	//the total path cost.
 }
 
 void PlayScene::start()
@@ -101,6 +118,20 @@ void PlayScene::start()
 	// Impassable tiles
 	// add function here that sets up impassable tiles
 	// e.g.
+
+	const SDL_Color blue = { 0, 0, 255, 255 };
+	m_pInstructionsLabel = new Label("Press F to find Shortest Path, R to reset the scene, ", "Consolas", 20, blue, glm::vec2(400.0f, 40.0f));
+	m_pInstructionsLabel->setParent(this);
+	addChild(m_pInstructionsLabel);
+
+	m_pInstructionsLabe2 = new Label(" ` for debug control, S for move ship to target", "Consolas", 20, blue, glm::vec2(400.0f, 60.0f));
+	m_pInstructionsLabe2->setParent(this);
+	addChild(m_pInstructionsLabe2);
+
+
+
+
+
 
 
 	// preload sounds
@@ -195,7 +226,7 @@ void PlayScene::m_setGridEnabled(const bool state)
 	for (auto tile : m_pGrid)
 	{
 		tile->setEnabled(m_isGridEnabled); // enables each Tile Object
-		tile->setLabelsEnabled(m_isGridEnabled); // enables the corresponding Labels
+		//tile->setLabelsEnabled(m_isGridEnabled); // enables the corresponding Labels
 	}
 }
 
@@ -299,7 +330,7 @@ void PlayScene::m_findShortestPath()
 			{
 				if (neighbour->getTileStatus() == UNVISITED)
 				{
-					neighbour->setTileStatus(CLOSED);
+					//neighbour->setTileStatus(CLOSED);
 					m_pClosedList.push_back(neighbour);
 				}
 			}
@@ -414,7 +445,7 @@ void PlayScene::GUI_Function()
 	// See examples by uncommenting the following - also look at imgui_demo.cpp in the IMGUI filter
 	//ImGui::ShowDemoWindow();
 
-	ImGui::Begin("Lab 4 Debug Properties", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoMove);
+	ImGui::Begin("assemnt 2", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoMove);
 
 	ImGui::Separator();
 
