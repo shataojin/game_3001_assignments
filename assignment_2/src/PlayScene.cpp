@@ -488,11 +488,6 @@ void PlayScene::GUI_Function()
 		}
 	}
 
-	ImGui::SameLine();
-	if (ImGui::Button("Reset Pathfinding"))
-	{
-		m_resetPathFinding();
-	}
 
 	ImGui::SameLine();
 	if (ImGui::Button("Reset Simulation"))

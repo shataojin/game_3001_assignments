@@ -57,6 +57,46 @@ void StartScene::handleEvents()
 		addChild(m_pTarget);
 		addChild(m_pSpaceShip);
 	}*/
+
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_H))
+	{
+		m_setGridEnabled(m_isGridEnabled);
+		addChild(m_pTarget);
+		addChild(m_pSpaceShip);
+		m_findShortestPath();
+		m_isGridEnabled = true;
+
+	}
+
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_F))
+	{
+		m_getTile(4, 3)->setTileStatus(IMPASSABLE);
+		m_getTile(4, 4)->setTileStatus(IMPASSABLE);
+		m_getTile(4, 5)->setTileStatus(IMPASSABLE);
+		m_getTile(4, 6)->setTileStatus(IMPASSABLE);
+		m_getTile(4, 7)->setTileStatus(IMPASSABLE);
+		m_getTile(4, 8)->setTileStatus(IMPASSABLE);
+		m_getTile(5, 8)->setTileStatus(IMPASSABLE);
+		m_getTile(6, 8)->setTileStatus(IMPASSABLE);
+		m_getTile(7, 8)->setTileStatus(IMPASSABLE);
+		m_getTile(8, 8)->setTileStatus(IMPASSABLE);
+		m_getTile(9, 8)->setTileStatus(IMPASSABLE);
+		m_getTile(15, 8)->setTileStatus(IMPASSABLE);
+		m_getTile(15, 9)->setTileStatus(IMPASSABLE);
+		m_getTile(15, 10)->setTileStatus(IMPASSABLE);
+		m_getTile(15, 7)->setTileStatus(IMPASSABLE);
+		m_setGridEnabled(m_isGridEnabled);
+		addChild(m_pTarget);
+		addChild(m_pSpaceShip);
+		m_findShortestPath();
+		m_isGridEnabled = true;
+	}
+
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_M))
+	{
+
+	}
+
 }
 
 void StartScene::start()
@@ -91,7 +131,7 @@ void StartScene::start()
 		});
 	addChild(m_pStartButton);
 
-
+	SoundManager::Instance().load("../Assets/audio/yay.ogg", "yay", SOUND_SFX);
 
 
 
@@ -198,7 +238,7 @@ void StartScene::m_setGridEnabled(const bool state)
 	for (auto tile : m_pGrid)
 	{
 		tile->setEnabled(m_isGridEnabled); // enables each Tile Object
-		//tile->setLabelsEnabled(m_isGridEnabled); // enables the corresponding Labels
+		tile->setLabelsEnabled(m_isGridEnabled); // enables the corresponding Labels
 	}
 }
 
@@ -302,7 +342,7 @@ void StartScene::m_findShortestPath()
 			{
 				if (neighbour->getTileStatus() == UNVISITED)
 				{
-					//neighbour->setTileStatus(CLOSED);
+					neighbour->setTileStatus(CLOSED);
 					m_pClosedList.push_back(neighbour);
 				}
 			}
@@ -407,6 +447,7 @@ Tile* StartScene::m_getTile(const glm::vec2 grid_position)
 	return m_getTile(col, row);
 }
 
+
 void StartScene::GUI_Function()
 {
 	auto offset = glm::vec2(Config::TILE_SIZE * 0.5f, Config::TILE_SIZE * 0.5f);
@@ -426,6 +467,8 @@ void StartScene::GUI_Function()
 	{
 		m_isGridEnabled = toggle_grid;
 		m_setGridEnabled(m_isGridEnabled);
+		addChild(m_pTarget);
+		addChild(m_pSpaceShip);
 	}
 
 	ImGui::Separator();
