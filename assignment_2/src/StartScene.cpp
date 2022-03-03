@@ -3,6 +3,13 @@
 #include "Game.h"
 #include "glm/gtx/string_cast.hpp"
 #include "EventManager.h"
+#include "imgui.h"
+#include "imgui_sdl.h"
+#include "Renderer.h"
+#include "Util.h"
+#include "Config.h"
+
+
 
 StartScene::StartScene()
 {
@@ -20,6 +27,10 @@ void StartScene::draw()
 void StartScene::update()
 {
 	updateDisplayList();
+	if (m_shipIsMoving)
+	{
+		m_moveShip();
+	}
 }
 
 void StartScene::clean()
@@ -41,6 +52,11 @@ void StartScene::handleEvents()
 	{
 		TheGame::Instance().changeSceneState(PLAY_SCENE);
 	}
+	/*if (EventManager::Instance().isKeyDown(SDL_SCANCODE_G))
+	{
+		addChild(m_pTarget);
+		addChild(m_pSpaceShip);
+	}*/
 }
 
 void StartScene::start()
@@ -53,11 +69,6 @@ void StartScene::start()
 	m_pInstructionsLabel = new Label("Press 1 to Play", "Consolas", 40, blue, glm::vec2(400.0f, 120.0f));
 	m_pInstructionsLabel->setParent(this);
 	addChild(m_pInstructionsLabel);
-
-
-	m_pShip = new Ship();
-	m_pShip->getTransform()->position = glm::vec2(400.0f, 300.0f);
-	addChild(m_pShip);
 
 	// Start Button
 	m_pStartButton = new Button();
@@ -80,13 +91,31 @@ void StartScene::start()
 		});
 	addChild(m_pStartButton);
 
-	ImGuiWindowFrame::Instance().setDefaultGUIFunction();
+
+
+
+
+	m_buildGrid();
+	auto offset = glm::vec2(Config::TILE_SIZE * 0.5f, Config::TILE_SIZE * 0.5f);
+	m_currentHeuristic = MANHATTAN;
+	m_pTarget = new Target();
+	m_pTarget->getTransform()->position = m_getTile(15, 11)->getTransform()->position + offset;
+	m_pTarget->setGridPosition(15.0f, 11.0f);
+	m_getTile(15, 11)->setTileStatus(GOAL);
+	//addChild(m_pTarget);
+
+	m_pSpaceShip = new SpaceShip();
+	m_pSpaceShip->getTransform()->position = m_getTile(1, 3)->getTransform()->position + offset;
+	m_pSpaceShip->setGridPosition(1.0f, 3.0f);
+	m_getTile(1, 3)->setTileStatus(START);
+	//addChild(m_pSpaceShip);
+	m_computeTileCosts();
+	ImGuiWindowFrame::Instance().setGUIFunction(std::bind(&StartScene::GUI_Function, this));
 }
 
 
 
-
-void PlayScene::m_buildGrid()
+void StartScene::m_buildGrid()
 {
 	const auto tile_size = Config::TILE_SIZE;
 
@@ -157,12 +186,12 @@ void PlayScene::m_buildGrid()
 	}
 }
 
-bool PlayScene::m_getGridEnabled() const
+bool StartScene::m_getGridEnabled() const
 {
 	return m_isGridEnabled;
 }
 
-void PlayScene::m_setGridEnabled(const bool state)
+void StartScene::m_setGridEnabled(const bool state)
 {
 	m_isGridEnabled = state;
 
@@ -173,7 +202,7 @@ void PlayScene::m_setGridEnabled(const bool state)
 	}
 }
 
-void PlayScene::m_computeTileCosts()
+void StartScene::m_computeTileCosts()
 {
 	float distance = 0.0f;
 	float dx = 0.0f;
@@ -201,7 +230,7 @@ void PlayScene::m_computeTileCosts()
 	}
 }
 
-void PlayScene::m_findShortestPath()
+void StartScene::m_findShortestPath()
 {
 	// check if pathList is empty
 	if (m_pPathList.empty())
@@ -288,7 +317,7 @@ void PlayScene::m_findShortestPath()
 	}
 }
 
-void PlayScene::m_displayPathList()
+void StartScene::m_displayPathList()
 {
 	for (auto tile : m_pPathList)
 	{
@@ -297,7 +326,7 @@ void PlayScene::m_displayPathList()
 	std::cout << "Path Length: " << m_pPathList.size() << std::endl;
 }
 
-void PlayScene::m_resetPathFinding()
+void StartScene::m_resetPathFinding()
 {
 	// clear the tile vectors
 	m_pPathList.clear();
@@ -325,7 +354,7 @@ void PlayScene::m_resetPathFinding()
 	m_shipIsMoving = false;
 }
 
-void PlayScene::m_resetSimulation()
+void StartScene::m_resetSimulation()
 {
 	auto offset = glm::vec2(Config::TILE_SIZE * 0.5f, Config::TILE_SIZE * 0.5f);
 	m_resetPathFinding();
@@ -346,7 +375,7 @@ void PlayScene::m_resetSimulation()
 	start_position[1] = m_pSpaceShip->getGridPosition().y;
 }
 
-void PlayScene::m_moveShip()
+void StartScene::m_moveShip()
 {
 	auto offset = glm::vec2(Config::TILE_SIZE * 0.5f, Config::TILE_SIZE * 0.5f);
 	if (m_moveCounter < m_pPathList.size())
@@ -365,12 +394,12 @@ void PlayScene::m_moveShip()
 	}
 }
 
-Tile* PlayScene::m_getTile(const int col, const int row)
+Tile* StartScene::m_getTile(const int col, const int row)
 {
 	return m_pGrid[(row * Config::COL_NUM) + col];
 }
 
-Tile* PlayScene::m_getTile(const glm::vec2 grid_position)
+Tile* StartScene::m_getTile(const glm::vec2 grid_position)
 {
 	const auto col = grid_position.x;
 	const auto row = grid_position.y;
@@ -378,7 +407,7 @@ Tile* PlayScene::m_getTile(const glm::vec2 grid_position)
 	return m_getTile(col, row);
 }
 
-void PlayScene::GUI_Function()
+void StartScene::GUI_Function()
 {
 	auto offset = glm::vec2(Config::TILE_SIZE * 0.5f, Config::TILE_SIZE * 0.5f);
 
@@ -484,5 +513,9 @@ void PlayScene::GUI_Function()
 }
 
 // For reset.
-int PlayScene::start_position[2];
-int PlayScene::goal_position[2];
+int StartScene::start_position[2];
+int StartScene::goal_position[2];
+
+
+
+

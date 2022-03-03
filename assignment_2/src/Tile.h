@@ -2,10 +2,10 @@
 #ifndef __TILE__
 #define __TILE__
 
-#include "Label.h"
 #include "NavigationObject.h"
-#include "NeighbourTile.h"
 #include "TileStatus.h"
+#include "Label.h"
+#include "NeighbourTile.h"
 
 class Tile : public NavigationObject
 {
@@ -15,13 +15,13 @@ public:
 
 	// Destructor
 	~Tile();
-	
+
 	// Life-Cycle Functions
 	void draw() override;
 	void update() override;
 	void clean() override;
 
-	// Getters (accessors) and Setters (mutators)
+	// Getters (Accessors) and Setters (Mutators)
 	Tile* getNeighbourTile(NeighbourTile position);
 	void setNeighbourTile(NeighbourTile position, Tile* tile);
 
@@ -34,10 +34,10 @@ public:
 	void addLabels();
 	void setLabelsEnabled(bool state);
 
-
 private:
+	// private instance members
 	float m_cost;
-	TileStatus m_status;
+	TileStatus  m_status;
 
 	Label* m_costLabel;
 	Label* m_statusLabel;
