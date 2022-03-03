@@ -1,7 +1,7 @@
 #include "PlayScene.h"
 #include "Game.h"
 #include "EventManager.h"
-
+#include<sstream>
 // required for IMGUI
 #include "imgui.h"
 #include "imgui_sdl.h"
@@ -19,9 +19,8 @@ PlayScene::~PlayScene()
 
 void PlayScene::draw()
 {
+	TextureManager::Instance().draw("bgp", 0, 0);
 	drawDisplayList();
-
-	SDL_SetRenderDrawColor(Renderer::Instance().getRenderer(), 255, 255, 255, 255);
 }
 
 void PlayScene::update()
@@ -74,20 +73,24 @@ void PlayScene::handleEvents()
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_F))
 	{
-		m_setGridEnabled(m_isGridEnabled = true);
 		m_findShortestPath();
 		SoundManager::Instance().playSound("yay", 0);
 	}
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_R))
 	{
 		m_setGridEnabled(m_isGridEnabled = false);
-		m_resetPathFinding();
+		m_resetSimulation();
 		SoundManager::Instance().playSound("yay", 0);
 	}
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_S))
 	{
 		m_shipIsMoving = true;
 		SoundManager::Instance().playSound("thunder", 0);
+	}
+
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_B))
+	{
+		TheGame::Instance().changeSceneState(START_SCENE);
 	}
 
 	//the total path cost.
@@ -97,9 +100,10 @@ void PlayScene::start()
 {
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
+	TextureManager::Instance().load("../Assets/textures/c.jpg", "bgp");
+
 
 	m_buildGrid();
-
 	auto offset = glm::vec2(Config::TILE_SIZE * 0.5f, Config::TILE_SIZE * 0.5f);
 	m_currentHeuristic = MANHATTAN;
 
@@ -120,11 +124,11 @@ void PlayScene::start()
 	// e.g.
 
 	const SDL_Color blue = { 0, 0, 255, 255 };
-	m_pInstructionsLabel = new Label("Press F to find Shortest Path, R to reset the scene, ", "Consolas", 20, blue, glm::vec2(400.0f, 40.0f));
+	m_pInstructionsLabel = new Label("Press F to find Shortest Path, R to reset the scene, ", "Consolas", 17, blue, glm::vec2(400.0f, 40.0f));
 	m_pInstructionsLabel->setParent(this);
 	addChild(m_pInstructionsLabel);
 
-	m_pInstructionsLabe2 = new Label(" ` for debug control, S for move ship to target", "Consolas", 20, blue, glm::vec2(400.0f, 60.0f));
+	m_pInstructionsLabe2 = new Label(" ` for debug control, S for move ship to target, B for back to start scence", "Consolas", 17, blue, glm::vec2(400.0f, 60.0f));
 	m_pInstructionsLabe2->setParent(this);
 	addChild(m_pInstructionsLabe2);
 
@@ -135,8 +139,12 @@ void PlayScene::start()
 
 
 	// preload sounds
-	SoundManager::Instance().load("../Assets/audio/yay.ogg", "yay", SOUND_SFX);
-	SoundManager::Instance().load("../Assets/audio/thunder.ogg", "thunder", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/win.wav", "yay", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/died.wav", "thunder", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/Bgm_2.mp3", "Bgm_2", SOUND_MUSIC);
+	SoundManager::Instance().playMusic("Bgm_2", -1, 0);
+	SoundManager::Instance().setMusicVolume(15);
+	SoundManager::Instance().setSoundVolume(20);
 
 	m_computeTileCosts();
 
@@ -347,9 +355,11 @@ void PlayScene::m_findShortestPath()
 
 void PlayScene::m_displayPathList()
 {
+
 	for (auto tile : m_pPathList)
 	{
 		std::cout << "(" << tile->getGridPosition().x << ", " << tile->getGridPosition().y << ")" << std::endl;
+
 	}
 	std::cout << "Path Length: " << m_pPathList.size() << std::endl;
 }
@@ -488,6 +498,12 @@ void PlayScene::GUI_Function()
 		}
 	}
 
+
+	ImGui::SameLine();
+	if (ImGui::Button("Reset Pathfinding"))
+	{
+		m_resetPathFinding();
+	}
 
 	ImGui::SameLine();
 	if (ImGui::Button("Reset Simulation"))

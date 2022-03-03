@@ -24,16 +24,16 @@ void Tile::draw()
 		Util::DrawFilledRect(getTransform()->position, getWidth(), getHeight(), glm::vec4(1.0f, 0.5f, 0.5f, 1.0f));
 		break;
 	case OPEN:
-		Util::DrawFilledRect(getTransform()->position, getWidth(), getHeight(), glm::vec4(0.73f, 0.73f, 0.83f, 1.0f));
+		Util::DrawFilledRect(getTransform()->position, getWidth(), getHeight(), glm::vec4(0.83f, 0.83f, 0.83f, 1.0f));
 		break;
 	case CLOSED:
 		Util::DrawFilledRect(getTransform()->position, getWidth(), getHeight(), glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
 		break;
-	case IMPASSABLE:
-		Util::DrawFilledRect(getTransform()->position, getWidth(), getHeight(), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-		break;
 	default:
 		Util::DrawRect(getTransform()->position, getWidth(), getHeight());
+		break;
+	case IMPASSABLE:
+		Util::DrawFilledRect(getTransform()->position, getWidth(), getHeight(), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 		break;
 	}
 }
@@ -65,7 +65,7 @@ void Tile::setTileCost(const float cost)
 {
 	m_cost = cost;
 
-	// convert string format to single precision
+	// format string to 1 decimal place
 	std::stringstream stream;
 	stream << std::fixed << std::setprecision(1) << m_cost;
 	const std::string cost_string = stream.str();
@@ -109,13 +109,13 @@ void Tile::addLabels()
 {
 	auto offset = glm::vec2(Config::TILE_SIZE * 0.5f, Config::TILE_SIZE * 0.5f);
 
-	// cost Label
+	// cost label
 	m_costLabel = new Label("99.9", "Consolas", 12);
 	m_costLabel->getTransform()->position = getTransform()->position + offset + glm::vec2(0.0f, -6.0f);
 	getParent()->addChild(m_costLabel);
 	m_costLabel->setEnabled(false);
 
-	// status Label
+	// status label
 	m_statusLabel = new Label("=", "Consolas", 12);
 	m_statusLabel->getTransform()->position = getTransform()->position + offset + glm::vec2(0.0f, 6.0f);
 	getParent()->addChild(m_statusLabel);

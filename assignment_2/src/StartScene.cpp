@@ -63,9 +63,8 @@ void StartScene::handleEvents()
 		m_setGridEnabled(m_isGridEnabled);
 		addChild(m_pTarget);
 		addChild(m_pSpaceShip);
-		m_findShortestPath();
 		m_isGridEnabled = true;
-
+		m_displayPathList();
 	}
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_F))
@@ -85,16 +84,21 @@ void StartScene::handleEvents()
 		m_getTile(15, 9)->setTileStatus(IMPASSABLE);
 		m_getTile(15, 10)->setTileStatus(IMPASSABLE);
 		m_getTile(15, 7)->setTileStatus(IMPASSABLE);
-		m_setGridEnabled(m_isGridEnabled);
-		addChild(m_pTarget);
-		addChild(m_pSpaceShip);
 		m_findShortestPath();
-		m_isGridEnabled = true;
 	}
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_M))
 	{
 		m_shipIsMoving = true;
+	}
+
+	if (m_isGridEnabled = true)
+	{
+		if (EventManager::Instance().mousePressed(SDL_BUTTON_LEFT))
+		{
+			std::cout << "aaaaaa" << std::endl;
+
+		}
 	}
 
 }
@@ -106,7 +110,7 @@ void StartScene::start()
 	m_pStartLabel->setParent(this);
 	addChild(m_pStartLabel);
 
-	m_pInstructionsLabel = new Label("H for debug view, F for shortest path, M for moving", "Consolas", 20, blue, glm::vec2(400.0f, 500.0f));
+	m_pInstructionsLabel = new Label("H for debug view, A for showing the blocker ,F for shortest path, M for moving", "Consolas", 17, blue, glm::vec2(400.0f, 500.0f));
 	m_pInstructionsLabel->setParent(this);
 	addChild(m_pInstructionsLabel);
 
@@ -564,6 +568,10 @@ void StartScene::GUI_Function()
 		m_computeTileCosts();
 		m_resetPathFinding();
 	}
+
+	ImGui::Separator();
+
+
 
 	ImGui::End();
 }
