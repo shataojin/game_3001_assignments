@@ -94,7 +94,7 @@ void StartScene::handleEvents()
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_M))
 	{
-
+		m_shipIsMoving = true;
 	}
 
 }
@@ -102,14 +102,23 @@ void StartScene::handleEvents()
 void StartScene::start()
 {
 	const SDL_Color blue = { 0, 0, 255, 255 };
-	m_pStartLabel = new Label("START SCENE", "Consolas", 80, blue, glm::vec2(400.0f, 40.0f));
+	m_pStartLabel = new Label("START SCENE", "Consolas", 60, blue, glm::vec2(400.0f, 40.0f));
 	m_pStartLabel->setParent(this);
 	addChild(m_pStartLabel);
 
-	m_pInstructionsLabel = new Label("Press 1 to Play", "Consolas", 40, blue, glm::vec2(400.0f, 120.0f));
+	m_pInstructionsLabel = new Label("H for debug view, F for shortest path, M for moving", "Consolas", 20, blue, glm::vec2(400.0f, 500.0f));
 	m_pInstructionsLabel->setParent(this);
 	addChild(m_pInstructionsLabel);
 
+	//
+	m_TextLabels = new Label("name:taojin sha", "Consolas", 20, blue, glm::vec2(90.0f, 560.0f));
+	m_TextLabels->setParent(this);
+	addChild(m_TextLabels);
+
+	m_TextID = new Label("studentID: 101334639", "Consolas", 20, blue, glm::vec2(115.0f, 580.0f));
+	m_TextID->setParent(this);
+	addChild(m_TextID);
+	//
 	// Start Button
 	m_pStartButton = new Button();
 	m_pStartButton->getTransform()->position = glm::vec2(400.0f, 400.0f);
@@ -130,6 +139,10 @@ void StartScene::start()
 			m_pStartButton->setAlpha(255);
 		});
 	addChild(m_pStartButton);
+
+
+
+
 
 	SoundManager::Instance().load("../Assets/audio/yay.ogg", "yay", SOUND_SFX);
 
